@@ -34,7 +34,7 @@ const userDdapther = 'idb';
 
 const collections = [
     {
-        name: 'heros',
+        name: 'heroes',
         schema: HeroSchema,
         methods: {
             hpPercent(this: RxHeroDocument): number {
@@ -46,7 +46,7 @@ const collections = [
 ]
 
 console.log('hostname', window.location.hostname);
-const syncURL = `http://` + window.location.hostname + ':10101/'
+const syncURL = `http://` + window.location.hostname + ':3001/'
 
 let doSync = true;
 
@@ -56,7 +56,7 @@ if (window.location.hash === '#nosync') { doSync = false; }
 const createDatabase = async (): Promise<RxHeroesDatabase> => {
     console.log('DatabaseService: creating database...');
     const db = await createRxDatabase<RxHeroesCollections>({
-        name: 'heros',
+        name: 'heroes',
         adapter: userDdapther
         // password
     })
