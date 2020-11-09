@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback  } from 'react';
 import { useObservable } from 'rxjs-hooks'
 import { RxHeroDocument, RxHeroesDatabase } from '../../db/type'
-import DatabaseService from '../../services/Database.service'
+import DatabaseService from '../../db/services/Database.service'
 
 export interface HeroListProps {
 

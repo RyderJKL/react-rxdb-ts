@@ -10,6 +10,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
+    "antd": "^4.8.0",
     "pouchdb-adapter-http": "^7.2.2",
     "pouchdb-adapter-idb": "^7.2.2",
     "react": "^17.0.1",

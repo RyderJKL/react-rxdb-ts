@@ -2,8 +2,9 @@ import {
    RxJsonSchema
 } from 'rxdb'
 
+import { RxHeroDocumentType } from '../type'
 
-const schema: RxJsonSchema = {
+const schema: RxJsonSchema<RxHeroDocumentType> = {
    title: 'hero schema',
    description: 'describes a simple hero',
    version: 0,

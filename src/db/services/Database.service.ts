@@ -3,12 +3,11 @@ import {
     RxHeroesCollections,
     RxHeroDocument,
     RxHeroDocumentType,
-    RxHeroCollection
-} from '../db/type'
+} from '../type'
 
 import HeroSchema from '../schema/Hero.schema'
 
-import { createRxDatabase, addRxPlugin  } from 'rxdb/plugins/core'
+import { createRxDatabase, addRxPlugin  } from 'rxdb/dist/types/core'
 
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode'
 
