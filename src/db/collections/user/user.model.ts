@@ -1,4 +1,4 @@
-export interface Model {
+export interface UserModel {
     /**
      * 头像地址
      */

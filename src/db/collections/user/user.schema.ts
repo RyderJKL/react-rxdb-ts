@@ -2,11 +2,11 @@ import {
     RxJsonSchema
 } from 'rxdb'
 
-import {Model} from "./model";
+import {UserModel} from "./user.model";
 
-const schema: RxJsonSchema<Model> = {
-    title: 'hero schema',
-    description: 'describes a simple hero',
+const userSchema: RxJsonSchema<UserModel> = {
+    title: 'user schema',
+    description: 'describes a simple user',
     version: 0,
     keyCompression: false,
     type: 'object',
@@ -30,4 +30,4 @@ const schema: RxJsonSchema<Model> = {
     required: ['userId']
 }
 
-export default schema;
+export default userSchema;

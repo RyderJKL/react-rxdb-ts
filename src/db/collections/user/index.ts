@@ -1,6 +1,6 @@
 import { RxDocument, RxCollection } from 'rxdb';
-import { Model } from './model'
+import { UserModel } from './user.model'
 
-export type UserDocument = RxDocument<Model>
+export type UserDocument = RxDocument<UserModel>
 export type UserCollection = RxCollection<UserDocument>
-export default UserCollection
+export { default } from './user.collection';

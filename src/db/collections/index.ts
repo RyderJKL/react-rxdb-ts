@@ -1,10 +1,16 @@
-import {RxDatabase} from "rxdb";
+import userCollection, { UserCollection } from './user'
+import heroCollection, { HeroCollection } from './hero'
 
-import UserCollection from './user'
-
-export  interface Collections {
-    user: UserCollection
+export interface Collections {
+    user: UserCollection,
+    hero: HeroCollection
 }
 
-export type RxHeroesDatabase = RxDatabase<Collections>
-export default RxHeroesDatabase
+const collections = [
+    userCollection,
+    heroCollection
+]
+
+export default collections
+
+

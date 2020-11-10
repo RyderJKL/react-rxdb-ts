@@ -1,8 +1,8 @@
-import schema  from './schema'
+import userSchema  from './user.schema'
 
-const collection = {
+const userCollection = {
    name: 'user',
-   schema,
+   schema: userSchema,
    pouchSettings: {},
    statics: {},
    methods: {},
@@ -14,4 +14,4 @@ const collection = {
    sync: true
 }
 
-export default collection;
+export default userCollection;
