@@ -1,45 +1,43 @@
 import React, { useState, useEffect, useCallback  } from 'react';
-import { useObservable } from 'rxjs-hooks'
-import { RxHeroDocument, RxHeroesDatabase } from '../../db/type'
-import DatabaseService from '../../db/services/Database.service'
-
+import { Database } from '../../db'
+import { HeroDocument } from '../../db/collections/hero'
 export interface HeroListProps {
-
+    db: Database
 }
 
-const HeroList = () => {
-    const [heroes, setHeroes] =useState<RxHeroDocument[]>([]);
+const HeroList = (props: HeroListProps) => {
+    const { db } = props;
+    const [heroes, setHeroes] =useState<HeroDocument[]>([]);
     const [heroName, setHeroName] = useState('');
 
-    const handleEditor = useCallback((hero: RxHeroDocument) => {
+    const handleEditor = useCallback((hero: HeroDocument) => {
         hero.atomicSet('hp', Math.floor((Math.random() * 100))).then(() => console.log('atomicSet success'));
     }, [])
 
-    const handleRemove = useCallback((hero: RxHeroDocument) => {
+    const handleRemove = useCallback((hero: HeroDocument) => {
         console.log('remove hero')
         hero.remove().catch(console.error);
     }, [])
 
     const saveHero =async () => {
-       const db: RxHeroesDatabase = await DatabaseService.get();
        const obj = {
            name: heroName,
            color: `#${Math.floor((Math.random() * 100000))}`,
            hp: 100,
            maxHP: 1000
        }
-       await db.heroes.insert(obj);
+       // await db.myDb.hero
        console.log('inset new hero', heroName)
        setHeroName('')
     }
 
     useEffect( () => {
        const generateDb = async () => {
-          const db =  await DatabaseService.get();
+          // const db =  await DatabaseService.get();
           db.heroes.find({
                selector: {},
                sort: [{name: 'asc'}]
-           }).$.subscribe((heroes: RxHeroDocument[] ) => {
+           }).$.subscribe((heroes: HeroDocument[] ) => {
                setHeroes(heroes)
            })
        }

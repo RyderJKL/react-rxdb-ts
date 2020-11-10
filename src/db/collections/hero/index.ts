@@ -1,6 +1,6 @@
 import { RxDocument, RxCollection } from 'rxdb';
 import { HeroModel } from './hero.model'
 
-export type UserDocument = RxDocument<HeroModel>
-export type HeroCollection = RxCollection<UserDocument>
+export type HeroDocument = RxDocument<HeroModel, {}>
+export type HeroCollection = RxCollection<HeroDocument, {}, {}>
 export { default } from './hero.collection';

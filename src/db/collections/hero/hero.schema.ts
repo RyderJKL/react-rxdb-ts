@@ -53,7 +53,7 @@ const schema: RxJsonSchema<HeroModel> = {
             default: []
         }
     },
-    required: ['color', 'hp', 'maxHP', 'skills']
+    required: ['name', 'color']
 }
 
 export default schema;
