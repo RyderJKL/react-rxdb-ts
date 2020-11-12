@@ -2,11 +2,11 @@ import React, { useState, useEffect, useCallback  } from 'react';
 import { Database } from '../../db'
 import { HeroDocument } from '../../db/collections/hero'
 export interface HeroListProps {
-    db: Database
+    database: Database
 }
 
 const HeroList = (props: HeroListProps) => {
-    const { db } = props;
+    const { database } = props;
     const [heroes, setHeroes] =useState<HeroDocument[]>([]);
     const [heroName, setHeroName] = useState('');
 
@@ -26,15 +26,14 @@ const HeroList = (props: HeroListProps) => {
            hp: 100,
            maxHP: 1000
        }
-       // await db.myDb.hero
+       await database.hero.insert(obj)
        console.log('inset new hero', heroName)
        setHeroName('')
     }
 
     useEffect( () => {
-       const generateDb = async () => {
-          // const db =  await DatabaseService.get();
-          db.heroes.find({
+       const generatedatabase = async () => {
+          database.hero.find({
                selector: {},
                sort: [{name: 'asc'}]
            }).$.subscribe((heroes: HeroDocument[] ) => {
@@ -42,8 +41,8 @@ const HeroList = (props: HeroListProps) => {
            })
        }
 
-       generateDb().catch(error => console.error(error));
-    }, []);
+       generatedatabase().catch(error => console.error(error));
+    }, [database.hero]);
 
     return (<div className="heroes-list">
         <section>

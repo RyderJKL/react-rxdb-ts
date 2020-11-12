@@ -1,11 +1,20 @@
 import heroSchema  from './hero.schema'
+import { RxCollection } from 'rxdb';
+import { HeroModel } from './hero.model';
+import { HeroDocument, HeroDocMethods } from './hero.document'
+
+export type HeroCollection = RxCollection<HeroModel, HeroDocMethods, {}>
 
 const userCollection = {
-    name: 'hero',
+    name: 'heroes',
     schema: heroSchema,
     pouchSettings: {},
     statics: {},
-    methods: {},
+    methods: {
+        hpPercent(this: HeroDocument): number {
+            return this.hp / this.maxHP * 100;
+        }
+    },
     attachments: {},
     options: {},
     migrationStrategies: {},

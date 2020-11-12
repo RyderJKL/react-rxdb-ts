@@ -2,7 +2,7 @@ import {RxDatabase} from 'rxdb';
 
 import collections, {Collections} from "./collections";
 
-import {createRxDatabase, addRxPlugin} from 'rxdb/dist/types/core'
+import {createRxDatabase, addRxPlugin} from 'rxdb'
 
 import {RxDBDevModePlugin} from 'rxdb/plugins/dev-mode'
 
@@ -41,7 +41,7 @@ if (window.location.hash === '#nosync') {
 const createDatabase = async (): Promise<Database> => {
     console.log('DatabaseService: creating database...');
     const db = await createRxDatabase<Collections>({
-        name: 'myDb',
+        name: 'database',
         adapter: userAdapter
         // password
     })

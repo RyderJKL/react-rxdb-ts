@@ -4,7 +4,8 @@ import {
 
 import { HeroModel } from './hero.model'
 
-const schema: RxJsonSchema<HeroModel> = {
+export type HeroSchema = RxJsonSchema<HeroModel>;
+const schema: HeroSchema = {
     title: 'hero schema',
     description: 'describes a simple hero',
     version: 0,
@@ -53,7 +54,7 @@ const schema: RxJsonSchema<HeroModel> = {
             default: []
         }
     },
-    required: ['name', 'color']
+    required: ['name', 'color', 'hp', 'maxHP']
 }
 
 export default schema;

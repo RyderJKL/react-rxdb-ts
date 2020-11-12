@@ -9,6 +9,8 @@ function App() {
 
   const createDB = useCallback(async () => {
     const db = await DatabaseService.get();
+    console.log(db)
+    await db.hero.insert({name: 'jack', color: 'red', hp: 100, maxHP: 200})
     setDatabase(db)
   }, [])
 
@@ -18,7 +20,7 @@ function App() {
 
   return (
     <div className="App">
-      <HeroList/>
+      { database && <HeroList database={database}/> }
     </div>
   );
 }

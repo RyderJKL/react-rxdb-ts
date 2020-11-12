@@ -1,5 +1,5 @@
-import userCollection, { UserCollection } from './user'
-import heroCollection, { HeroCollection } from './hero'
+import user, { UserCollection } from './user'
+import hero, { HeroCollection } from './hero'
 
 export interface Collections {
     user: UserCollection,
@@ -7,8 +7,8 @@ export interface Collections {
 }
 
 const collections = [
-    userCollection,
-    heroCollection
+    user,
+    hero
 ]
 
 export default collections
