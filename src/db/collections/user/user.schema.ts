@@ -4,6 +4,8 @@ import {
 
 import {UserModel} from "./user.model";
 
+export type UserSchema = RxJsonSchema<UserModel>;
+
 const userSchema: RxJsonSchema<UserModel> = {
     title: 'user schema',
     description: 'describes a simple user',

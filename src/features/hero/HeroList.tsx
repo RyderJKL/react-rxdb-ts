@@ -26,7 +26,8 @@ const HeroList = (props: HeroListProps) => {
            hp: 100,
            maxHP: 1000
        }
-       await database.hero.insert(obj)
+       await database.hero.atomicUpsert(obj);
+       await database.user.atomicUpsert({ name: 'jack', userId: '100' });
        console.log('inset new hero', heroName)
        setHeroName('')
     }

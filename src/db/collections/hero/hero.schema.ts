@@ -52,6 +52,10 @@ const schema: HeroSchema = {
                 }
             },
             default: []
+        },
+        pet: {
+            type: 'string',
+            ref: 'user'
         }
     },
     required: ['name', 'color', 'hp', 'maxHP']

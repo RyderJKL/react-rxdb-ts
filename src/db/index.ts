@@ -29,7 +29,7 @@ addRxPlugin(PouchdbAdapterIdb)
 const userAdapter = 'idb';
 
 console.log('hostname', window.location.hostname);
-const syncURL = `http://` + window.location.hostname + ':3001/'
+const syncURL = `http://` + window.location.hostname + ':3000/'
 
 let doSync = true;
 
@@ -76,15 +76,6 @@ const createDatabase = async (): Promise<Database> => {
     }, true)
 
     // sync with server
-    // console.log('DatabaseService: sync');
-    // await db.hero.insert({
-    //     name: 'jack',
-    //     color: 'red',
-    //     hp: 11,
-    //     maxHP: 200,
-    //     team: 'jaa',
-    //     skills: [{name: '', damage: 'as'}]
-    // })
     await db.user.sync({
         remote: syncURL + '/hero'
     })
