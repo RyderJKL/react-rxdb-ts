@@ -9,22 +9,15 @@ export interface HeroDocMethods {
     hpPercent(): number;
 }
 
-const userCollection = {
+const heroCollection = {
     name: 'hero',
     schema,
-    pouchSettings: {},
-    statics: {},
     methods: {
         hpPercent(this: HeroDocument): number {
             return this.hp / this.maxHP * 100;
         }
     },
-    attachments: {},
-    options: {},
-    migrationStrategies: {},
-    autoMigrate: true,
-    cacheReplacementPolicy: function(){},
     sync: true
 }
 
-export default userCollection;
+export default heroCollection;

@@ -49,34 +49,36 @@ const createDatabase = async (): Promise<Database> => {
     (window as any).db = db; // for debug
 
     // show leadership in title
-    db.waitForLeadership().then(() => {
+    await db.waitForLeadership().then(() => {
         console.log('isLeader now');
         document.title = 'xxx' + document.title
     })
 
+    console.log(db)
     // create collections;
     console.log('DatabaseService: create collections');
+    console.log('collections', collections)
     await Promise.all(collections.map((colData) => db.collection(colData)))
 
     // hooks
     console.log('DatabaseService: add hooks');
-    db.collections.user.preInsert((user) => {
-        const userId = user.userId;
-        return db.collections.user.findOne({
-            selector: {
-                userId
-            }
-        }).exec().then(((has) => {
-            if (has != null) {
-                console.error('another user already has the userId', userId);
-                throw new Error('userId');
-            }
-            return db
-        }))
-    }, true)
+    // db.collections.user.preInsert((user) => {
+    //     const userId = user.userId;
+    //     return db.collections.user.findOne({
+    //         selector: {
+    //             userId
+    //         }
+    //     }).exec().then(((has) => {
+    //         if (has != null) {
+    //             console.error('another user already has the userId', userId);
+    //             throw new Error('userId');
+    //         }
+    //         return db
+    //     }))
+    // }, true)
 
     // sync with server
-    await db.user.sync({
+    await db.hero.sync({
         remote: syncURL + '/hero'
     })
 

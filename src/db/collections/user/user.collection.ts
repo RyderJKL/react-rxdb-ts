@@ -12,19 +12,8 @@ export interface UserDocMethods {
 const userCollection = {
    name: 'user',
    schema: userSchema,
-   pouchSettings: {},
    statics: {},
-   methods: {
-      getUser (this: UserDocument) {
-
-      }
-   },
-   attachments: {},
-   options: {},
-   migrationStrategies: {},
-   autoMigrate: true,
-   cacheReplacementPolicy: function(){},
-   sync: true
+   sync: false,
 }
 
 export default userCollection;

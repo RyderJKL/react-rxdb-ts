@@ -1,3 +1,5 @@
+import { PetModel } from '../pet/pet.model'
+
 export interface HeroModel {
     name: string;
     color: string;
