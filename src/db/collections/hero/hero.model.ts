@@ -10,5 +10,5 @@ export interface HeroModel {
         name?: string;
         damage?: string
     }>
-    pet?: string;
+    pet: PetModel;
 }

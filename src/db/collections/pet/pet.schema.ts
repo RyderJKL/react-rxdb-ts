@@ -9,7 +9,7 @@ export type PetSchema = RxJsonSchema<PetModel>;
 const userSchema: RxJsonSchema<PetModel> = {
     title: 'pet schema',
     description: 'describes a simple pet',
-    version: 1,
+    version: 0,
     keyCompression: false,
     type: 'object',
     properties: {

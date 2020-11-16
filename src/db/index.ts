@@ -12,7 +12,9 @@ import {RxDBLeaderElectionPlugin} from 'rxdb/plugins/leader-election'
 import {RxDBReplicationPlugin} from 'rxdb/plugins/replication'
 
 import * as PouchdbAdapterHttp from 'pouchdb-adapter-http';
-import * as PouchdbAdapterIdb from 'pouchdb-adapter-idb';
+// import * as PouchdbAdapterIdb from 'pouchdb-adapter-idb';
+// https://github.com/pubkey/rxdb/blob/master/docs-src/questions-answers.md#cant-change-the-schema
+import * as PouchdbAdapterMemory from 'pouchdb-adapter-memory';
 
 export type Database = RxDatabase<Collections>;
 
@@ -24,9 +26,13 @@ addRxPlugin(RxDBValidatePlugin)
 addRxPlugin(RxDBLeaderElectionPlugin);
 addRxPlugin(RxDBReplicationPlugin);
 addRxPlugin(PouchdbAdapterHttp);
-addRxPlugin(PouchdbAdapterIdb)
 
-const userAdapter = 'idb';
+if (process.env.NODE_ENV === 'development') {
+    addRxPlugin(PouchdbAdapterMemory)
+}
+
+// const userAdapter = 'idb';
+const userAdapter = 'memory';
 
 console.log('hostname', window.location.hostname);
 const syncURL = `http://` + window.location.hostname + ':3000/'
@@ -42,7 +48,8 @@ const createDatabase = async (): Promise<Database> => {
     console.log('DatabaseService: creating database...');
     const db = await createRxDatabase<Collections>({
         name: 'database',
-        adapter: userAdapter
+        adapter: userAdapter,
+        multiInstance: false
         // password
     })
     console.log('DatabaseService: created database');
