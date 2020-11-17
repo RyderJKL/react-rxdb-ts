@@ -4,26 +4,26 @@ import {
 
 import {HeroModel} from './hero.model'
 
-type JsonSchema<DocType = any> = {
-    properties: {
-        [key in keyof DocType]: key extends object ? { properties: JsonSchema<key> } : string
-    }
-}
-
-const demoHero: JsonSchema<HeroModel> = {
-    properties: {
-        name: 'jack',
-        color: '34',
-        hp: '334',
-        maxHP: '344',
-        pet: {
-            properties: {
-                pet: 'hh',
-                petId: '34'
-            }
-        }
-    }
-}
+// type JsonSchema<DocType = any> = {
+//     properties: {
+//         [key in keyof DocType]: key extends object ? { properties: JsonSchema<key>  } : string
+//     }
+// }
+//
+// const demoHero: JsonSchema<HeroModel> = {
+//     properties: {
+//         name: 'jack',
+//         color: '34',
+//         hp: '334',
+//         maxHP: '344',
+//         pet: {
+//             properties: {
+//                 pet: 'hh',
+//                 petId: '34'
+//             }
+//         }
+//     }
+// }
 export type HeroSchema = RxJsonSchema<HeroModel>;
 const schema: HeroSchema = {
     title: 'hero schema',
@@ -77,11 +77,11 @@ const schema: HeroSchema = {
             type: 'object',
             properties: {
                 petId: {type: 'string', ref: 'pet'},
-                petName: {type: 'string'},
+                name: {type: 'string'},
             }
         }
     },
-    required: ['name', 'color', 'hp', 'maxHP']
+    required: ['name', 'color', 'hp', 'maxHP', 'pet']
 }
 
 export default schema;
