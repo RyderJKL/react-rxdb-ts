@@ -43,10 +43,13 @@ if (window.location.hash === '#nosync') {
     doSync = false;
 }
 
+let db: Database;
+
 // 创建数据库
 const createDatabase = async (): Promise<Database> => {
     console.log('DatabaseService: creating database...');
-    const db = await createRxDatabase<Collections>({
+    if (db) return db;
+    db = await createRxDatabase<Collections>({
         name: 'database',
         adapter: userAdapter,
         multiInstance: false
@@ -60,6 +63,8 @@ const createDatabase = async (): Promise<Database> => {
         console.log('isLeader now');
         document.title = 'xxx' + document.title
     })
+
+    db.hero.preInsert(() => {}, false);
 
     console.log(db)
     // create collections;

@@ -18,5 +18,5 @@ export interface PetModel {
      */
     petId: string;
     /** 主人 */
-    master?: string;
+    heroId: string;
 }

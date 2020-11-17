@@ -13,11 +13,11 @@ const userSchema: RxJsonSchema<PetModel> = {
     keyCompression: false,
     type: 'object',
     properties: {
+        heroId: { type: 'string', ref: 'hero'},
         petId: {type: 'string', primary: true},
         name: {type: 'string'},
         avatar: {type: 'string'},
         avatarMax: {type: 'string'},
-        // master: { type: 'string', ref: 'hero'}
     },
     required: ['petId']
 }
