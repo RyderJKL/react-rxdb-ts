@@ -64,13 +64,15 @@ const createDatabase = async (): Promise<Database> => {
         document.title = 'xxx' + document.title
     })
 
-    db.hero.preInsert(() => {}, false);
-
     console.log(db)
     // create collections;
     console.log('DatabaseService: create collections');
     console.log('collections', collections)
-    await Promise.all(collections.map((colData) => db.collection(colData)))
+    await Promise.all(
+        collections
+            .map((colData) =>
+                db.collection(colData.baseCollection)
+                    .then((result) => colData.hooks(result))))
 
     // hooks
     console.log('DatabaseService: add hooks');

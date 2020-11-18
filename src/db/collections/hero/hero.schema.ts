@@ -32,10 +32,13 @@ const schema: HeroSchema = {
     keyCompression: false,
     type: 'object',
     properties: {
-        name: {
+        heroId: {
+            type: 'string',
+            default: ''
+        },
+        heroName: {
             type: 'string',
             primary: true,
-            default: ''
         },
         color: {
             type: 'string',
@@ -78,10 +81,11 @@ const schema: HeroSchema = {
             properties: {
                 petId: {type: 'string', ref: 'pet'},
                 name: {type: 'string'},
+                heroId: {type: 'string'}
             }
         }
     },
-    required: ['name', 'color', 'hp', 'maxHP', 'pet']
+    required: ['heroId', 'heroName', 'color', 'hp', 'maxHP']
 }
 
 export default schema;

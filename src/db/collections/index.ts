@@ -1,17 +1,20 @@
-// import user, { UserCollection } from './user'
-import hero, { HeroCollection } from './hero'
-import pet, { PetCollection } from './pet'
+import hero, {HeroCollection, heroHooks} from './hero'
+import pet, {PetCollection, petHooks} from './pet'
 
 export interface Collections {
-    // user: UserCollection,
     hero: HeroCollection
     pet: PetCollection
 }
 
 const collections = [
-    // user,
-    hero,
-    pet
+    {
+        baseCollection: hero,
+        hooks: heroHooks
+    },
+    {
+        baseCollection: pet,
+        hooks: petHooks
+    }
 ]
 
 export default collections

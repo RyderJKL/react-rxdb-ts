@@ -1,7 +1,8 @@
 import { PetModel } from '../pet/pet.model'
 
 export interface HeroModel {
-    name: string;
+    heroId: string;
+    heroName: string;
     color: string;
     hp: number;
     maxHP: number;
@@ -10,5 +11,5 @@ export interface HeroModel {
         name?: string;
         damage?: string
     }>
-    pet: PetModel;
+    pet?: PetModel;
 }

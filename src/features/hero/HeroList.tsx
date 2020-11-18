@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {Database} from '../../db'
-import {HeroDocument, HeroModel } from '../../db/collections/hero'
-import { PetModel } from '../../db/collections/pet'
-import { v4 as UUID } from 'uuid';
+import {HeroDocument, HeroModel} from '../../db/collections/hero'
+import {PetModel} from '../../db/collections/pet'
+import {v4 as UUID} from 'uuid';
 
 export interface HeroListProps {
     database: Database
@@ -27,7 +27,7 @@ const HeroList = (props: HeroListProps) => {
         const pet: PetModel = {
             heroId,
             petId: UUID(),
-            name: ['abcdefghiklmnopqrstuvwxyz'].slice(0,  names.length % Math.floor(Math.random() * 10)).join(''),
+            name: ['abcdefghiklmnopqrstuvwxyz'].slice(0, names.length % Math.floor(Math.random() * 10)).join(''),
             avatar: 'http//www.baidu.com'
         }
         return pet;
@@ -35,20 +35,15 @@ const HeroList = (props: HeroListProps) => {
 
     const saveHero = async () => {
         const obj = {
-            name: heroName,
+            heroId: UUID(),
+            heroName: heroName,
             color: `#${Math.floor((Math.random() * 100000))}`,
             hp: 100,
             maxHP: 1000,
         }
 
         if (!heroName) return;
-
-        await database.hero.atomicUpsert({ ...obj });
-        // await database.pet.atomicUpsert(pet);
-        // const hero = await database.hero.findOne().where('name').eq(heroName).exec();
-        // console.log(hero, 'new hero');
-        // const petJ = await hero?.populate('pet.petId')
-        // console.log(petJ)
+        await database.hero.atomicUpsert(obj);
 
         setHeroName('')
     }
@@ -57,8 +52,11 @@ const HeroList = (props: HeroListProps) => {
         const data = hero._data;
         console.log(data)
         console.log('random Add Pet to Hero', hero);
+        console.log(hero)
         const pet = generatePet(hero._data.heroId);
-        await hero.atomicUpdate({ ...data, pet: [...data.pet, pet] })
+        const newHero = {...data, pet: pet};
+        console.log(newHero)
+        await database.hero.atomicUpsert(newHero)
         await database.pet.atomicUpsert(pet);
         const herosPet = hero.pet;
         console.log(herosPet, 'herosPet');
@@ -68,7 +66,7 @@ const HeroList = (props: HeroListProps) => {
         const generatedatabase = async () => {
             database.hero.find({
                 selector: {},
-                sort: [{name: 'asc'}]
+                sort: [{heroName: 'asc'}]
             }).$.subscribe((heroes: HeroDocument[]) => {
                 setHeroes(heroes)
             })
@@ -92,11 +90,11 @@ const HeroList = (props: HeroListProps) => {
                     heroes && heroes.map((item, index) => {
                         return (<li className="hero-item" key={index}>
                         <span>
-                        hero: {item.name}
-                        pet: {item.pet.name}
+                        hero: {item.heroName}
+                            pet: {item?.pet?.name}
                         </span>
                             <span>colo: {item.color}</span>
-                            <span>hp: {item.hpPercent()}</span>
+                            {/*<span>hp: {item.hpPercent()}</span>*/}
                             <button onClick={() => handleEditor(item)}>edit</button>
                             <button onClick={() => handleRemove(item)}>remove</button>
                             <button onClick={() => randomAddPet(item)}>randomAddPet</button>
