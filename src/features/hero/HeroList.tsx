@@ -50,16 +50,16 @@ const HeroList = (props: HeroListProps) => {
 
     const randomAddPet = async (hero: HeroDocument) => {
         const data = hero._data;
-        console.log(data)
+        // console.log(data)
         console.log('random Add Pet to Hero', hero);
-        console.log(hero)
+        // console.log(hero)
         const pet = generatePet(hero._data.heroId);
         const newHero = {...data, pet: pet};
         console.log(newHero)
         await database.hero.atomicUpsert(newHero)
-        await database.pet.atomicUpsert(pet);
-        const herosPet = hero.pet;
-        console.log(herosPet, 'herosPet');
+        // await database.pet.atomicUpsert(pet);
+        // const herosPet = hero.pet;
+        // console.log(herosPet, 'herosPet');
     }
 
     useEffect(() => {
