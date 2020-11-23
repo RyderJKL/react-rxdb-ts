@@ -34,11 +34,10 @@ const schema: HeroSchema = {
     properties: {
         heroId: {
             type: 'string',
-            default: ''
+            primary: true,
         },
         heroName: {
             type: 'string',
-            primary: true,
         },
         color: {
             type: 'string',

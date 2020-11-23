@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {Database} from '../../db'
-import {HeroDocument, HeroModel} from '../../db/collections/hero'
+import {HeroDocument} from '../../db/collections/hero'
 import {PetModel} from '../../db/collections/pet'
 import {v4 as UUID} from 'uuid';
 
@@ -13,21 +13,25 @@ const HeroList = (props: HeroListProps) => {
     const [heroes, setHeroes] = useState<HeroDocument[]>([]);
     const [heroName, setHeroName] = useState('');
 
-    const handleEditor = useCallback((hero: HeroDocument) => {
-        hero.atomicSet('hp', Math.floor((Math.random() * 100))).then(() => console.log('atomicSet success'));
-    }, [])
+    const getNewMame = () => {
+        const names = 'abcdefghiklmnopqrstuvwxyz';
+        return names.split('').slice(0, Math.max(2, Math.floor(Math.random() * 10))).join('')
+    }
+
+    const handleHeroNameEditor = ((hero: HeroDocument) => {
+        const newName = getNewMame();
+        hero.atomicSet('heroName', newName).then(() => console.log('atomicSet success'))
+    })
 
     const handleRemove = useCallback((hero: HeroDocument) => {
-        console.log('remove hero', hero)
         hero.remove().catch(console.error);
     }, [])
 
     const generatePet = (heroId: string) => {
-        const names = ['abcdefghiklmnopqrstuvwxyz'];
         const pet: PetModel = {
             heroId,
             petId: UUID(),
-            name: ['abcdefghiklmnopqrstuvwxyz'].slice(0, names.length % Math.floor(Math.random() * 10)).join(''),
+            name: getNewMame(),
             avatar: 'http//www.baidu.com'
         }
         return pet;
@@ -44,29 +48,30 @@ const HeroList = (props: HeroListProps) => {
 
         if (!heroName) return;
         await database.hero.atomicUpsert(obj);
+        database.hero.getName();
 
         setHeroName('')
     }
 
     const randomAddPet = async (hero: HeroDocument) => {
         const data = hero._data;
-        // console.log(data)
-        console.log('random Add Pet to Hero', hero);
-        // console.log(hero)
         const pet = generatePet(hero._data.heroId);
         const newHero = {...data, pet: pet};
-        console.log(newHero)
         await database.hero.atomicUpsert(newHero)
-        // await database.pet.atomicUpsert(pet);
-        // const herosPet = hero.pet;
-        // console.log(herosPet, 'herosPet');
     }
+
+    const updatePetName = async (hero: HeroDocument, newPetName: string) => {
+        const data = hero._data;
+        const pet = data.pet;
+        const newHero = {...data, pet: { ...pet, name: newPetName}};
+        await database.hero.atomicUpsert(newHero)
+    };
 
     useEffect(() => {
         const generatedatabase = async () => {
             database.hero.find({
                 selector: {},
-                sort: [{heroName: 'asc'}]
+                sort: [{heroId: 'asc'}]
             }).$.subscribe((heroes: HeroDocument[]) => {
                 setHeroes(heroes)
             })
@@ -89,15 +94,18 @@ const HeroList = (props: HeroListProps) => {
                 {
                     heroes && heroes.map((item, index) => {
                         return (<li className="hero-item" key={index}>
-                        <span>
-                        hero: {item.heroName}
-                            pet: {item?.pet?.name}
-                        </span>
-                            <span>colo: {item.color}</span>
-                            {/*<span>hp: {item.hpPercent()}</span>*/}
-                            <button onClick={() => handleEditor(item)}>edit</button>
-                            <button onClick={() => handleRemove(item)}>remove</button>
-                            <button onClick={() => randomAddPet(item)}>randomAddPet</button>
+                            <p>
+
+                                hero: {item.heroName}
+                            </p>
+                            <p>
+                                pet: {item?.pet?.name}
+                            </p>
+                            <p>colo: {item.color}</p>
+                            <button onClick={() => handleHeroNameEditor(item)}>update hero Name</button>
+                            <button onClick={() => handleRemove(item)}>remove hero</button>
+                            <button onClick={() => randomAddPet(item)}>add pet to hero</button>
+                            <button onClick={() => updatePetName(item, getNewMame())}>update pet name</button>
                         </li>)
                     })
                 }

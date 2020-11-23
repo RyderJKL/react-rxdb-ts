@@ -47,14 +47,13 @@ let db: Database;
 
 // 创建数据库
 const createDatabase = async (): Promise<Database> => {
-    console.log('DatabaseService: creating database...');
     if (db) return db;
     db = await createRxDatabase<Collections>({
         name: 'database',
         adapter: userAdapter,
         multiInstance: false
-        // password
     })
+
     console.log('DatabaseService: created database');
     (window as any).db = db; // for debug
 
@@ -64,32 +63,13 @@ const createDatabase = async (): Promise<Database> => {
         document.title = 'xxx' + document.title
     })
 
-    console.log(db)
     // create collections;
-    console.log('DatabaseService: create collections');
-    console.log('collections', collections)
     await Promise.all(
         collections
             .map((colData) =>
                 db.collection(colData.baseCollection)
-                    .then((result) => colData.hooks(result))))
-
-    // hooks
-    console.log('DatabaseService: add hooks');
-    // db.collections.user.preInsert((user) => {
-    //     const userId = user.userId;
-    //     return db.collections.user.findOne({
-    //         selector: {
-    //             userId
-    //         }
-    //     }).exec().then(((has) => {
-    //         if (has != null) {
-    //             console.error('another user already has the userId', userId);
-    //             throw new Error('userId');
-    //         }
-    //         return db
-    //     }))
-    // }, true)
+                    // @ts-ignore
+                    .then((collection) => colData.hooks(collection, db))))
 
     // sync with server
     await db.hero.sync({
