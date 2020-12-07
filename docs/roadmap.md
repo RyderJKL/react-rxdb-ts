@@ -10,15 +10,17 @@
 
 ### 本地数据与服务端数据的同步
 
+## RxDB With Restful api
+
 ### API 自治
 
 ## 视图层和数据层的结合
 
-### rxdb 与 redux 的结合
-
-### rxbd 与 rxjs 的结合
+## rxdb 与 redux 的结合
 
 ### rxdb 与 connect 的结合
 
-### 数据层在 hook 组件和 class 组件中的使用
+## rxbd 与 rxjs 的结合
+
+## 数据层在 hook 组件和 class 组件中的使用
 

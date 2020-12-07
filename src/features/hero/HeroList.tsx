@@ -1,8 +1,12 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {Database} from '../../db'
 import {HeroDocument} from '../../db/collections/hero'
-import {PetModel} from '../../db/collections/pet'
+import {PetDocument, PetModel} from '../../db/collections/pet'
 import {v4 as UUID} from 'uuid';
+
+import {Table, Button} from 'antd'
+import {catchError, tap} from "rxjs/operators";
+import {of} from "rxjs";
 
 export interface HeroListProps {
     database: Database
@@ -20,8 +24,25 @@ const HeroList = (props: HeroListProps) => {
 
     const handleHeroNameEditor = ((hero: HeroDocument) => {
         const newName = getNewMame();
-        hero.atomicSet('heroName', newName).then(() => console.log('atomicSet success'))
+        database.hero.updateHero$({...hero._data, heroName: newName}).subscribe()
     })
+
+    const updatePetNameFromHero = (hero: HeroDocument, newPetName: string) => {
+        const data = hero._data;
+        const pet = data.pet;
+        const newHero = {...data, pet: {...pet, name: newPetName}};
+        console.log(newHero, 'newHero')
+        const subscription = database.hero.updateHero$(newHero).pipe(catchError(e => {
+            console.error(e);
+            return of('出错了')
+        })).subscribe(() => subscription.unsubscribe())
+    };
+
+    const updatePetNameFromPet = async (hero: HeroDocument) => {
+        const petDoc = await hero.populate('pet.petId') as PetDocument;
+        console.log(petDoc._data, 'pet')
+        petDoc && await petDoc.atomicPatch({ name: getNewMame() })
+    }
 
     const handleRemove = useCallback((hero: HeroDocument) => {
         hero.remove().catch(console.error);
@@ -37,7 +58,7 @@ const HeroList = (props: HeroListProps) => {
         return pet;
     }
 
-    const saveHero = async () => {
+    const saveHero = () => {
         const obj = {
             heroId: UUID(),
             heroName: heroName,
@@ -47,25 +68,20 @@ const HeroList = (props: HeroListProps) => {
         }
 
         if (!heroName) return;
-        await database.hero.atomicUpsert(obj);
-        database.hero.getName();
-
-        setHeroName('')
+        database.hero.createHero$(obj).pipe(tap((value) => {
+            console.log('at view createHero$')
+            setHeroName('')
+        })).subscribe();
     }
 
-    const randomAddPet = async (hero: HeroDocument) => {
+    const randomAddPet = (hero: HeroDocument) => {
         const data = hero._data;
         const pet = generatePet(hero._data.heroId);
         const newHero = {...data, pet: pet};
-        await database.hero.atomicUpsert(newHero)
+        console.log('add pet')
+        // await database.hero.atomicUpsert(newHero)
+        database.hero.updateHero$(newHero).subscribe()
     }
-
-    const updatePetName = async (hero: HeroDocument, newPetName: string) => {
-        const data = hero._data;
-        const pet = data.pet;
-        const newHero = {...data, pet: { ...pet, name: newPetName}};
-        await database.hero.atomicUpsert(newHero)
-    };
 
     useEffect(() => {
         const generatedatabase = async () => {
@@ -83,9 +99,15 @@ const HeroList = (props: HeroListProps) => {
     return (<div className="heroes-list">
         <section>
             <h2>hero insert</h2>
-            <div><input type="text" value={heroName} onKeyDown={e => {
-                e.keyCode === 13 && saveHero();
-            }} onChange={e => setHeroName(e.target.value)}/></div>
+            <div>
+                <input
+                    type="text" value={heroName}
+                    onKeyDown={e => {
+                        e.keyCode === 13 && saveHero();
+                    }}
+                    onChange={e => setHeroName(e.target.value)}
+                />
+            </div>
             <button onClick={saveHero}>submit</button>
         </section>
         <section>
@@ -100,12 +122,13 @@ const HeroList = (props: HeroListProps) => {
                             </p>
                             <p>
                                 pet: {item?.pet?.name}
+                                <button onClick={() => updatePetNameFromPet(item)}>update pet at pet</button>
                             </p>
                             <p>colo: {item.color}</p>
                             <button onClick={() => handleHeroNameEditor(item)}>update hero Name</button>
                             <button onClick={() => handleRemove(item)}>remove hero</button>
                             <button onClick={() => randomAddPet(item)}>add pet to hero</button>
-                            <button onClick={() => updatePetName(item, getNewMame())}>update pet name</button>
+                            <button onClick={() => updatePetNameFromHero(item, getNewMame())}>updatePetNameFromHero</button>
                         </li>)
                     })
                 }

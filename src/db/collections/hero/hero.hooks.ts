@@ -4,6 +4,7 @@ import { Database } from '../../index';
 
 export default function hooks(hero: HeroCollection, dataBase: Database) {
     hero.preInsert(async (data, self) => {
+        console.log('在 hero hooks 插入前')
         if (data.pet !== undefined) {
             // 根据 heroId 找到 hero collection 中对应的 hero document
             const heroDoc = await hero.findOne(data.heroId).exec();
@@ -26,15 +27,18 @@ export default function hooks(hero: HeroCollection, dataBase: Database) {
     }, false)
 
     hero.preSave((data, self) => {
-
+        console.log('在 hero hooks 保存前')
     }, false)
 
     hero.postSave(async (data, self) => {
+        console.log('在 hero hooks 保存后')
+        console.log(data)
         if (data.pet !== undefined) {
             // 根据 heroId 找到 hero collection 中对应的 hero document
             const heroDoc = await hero.findOne(data.heroId).exec();
             // 根据 heroDocument 中的 pet.petId populate 找到 对应的 pet document
             const petDoc = await heroDoc?.populate('pet.petId');
+            console.log(petDoc, 'petDoc');
             if (petDoc && !equals(petDoc._data, data.pet)) {
                 // pet document 存在，更新 pet
                 await petDoc.atomicPatch(data.pet);

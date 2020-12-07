@@ -2,37 +2,32 @@ import schema  from './hero.schema'
 import {
     RxCollection,
     RxDocument,
-    RxCollectionCreator,
 } from 'rxdb';
 import { HeroModel } from './hero.model';
+
+import methods, { HeroDocMethods } from './hero.document.methods';
+import statics, { HeroCollectionStatics } from './hero.collection.statics'
 
 export type HeroDocument = RxDocument<HeroModel, HeroDocMethods>
 export type HeroCollection = RxCollection<HeroModel, HeroDocMethods, HeroCollectionStatics>
 
-export interface HeroDocMethods {
-    hpPercent(this: HeroDocument): number;
-}
-
-export interface HeroCollectionStatics {
-    getName: (this: HeroCollection) => string;
-}
-
 const heroCollection = {
     name: 'hero',
     schema: schema,
-    statics: {
-        getName (this: HeroCollection) {
-            console.log(this.name, 'hero collection name')
-            return this.name;
-        }
-    },
-    methods: {
-        hpPercent(this: HeroDocument): number {
-            const result = this.hp / this.maxHP * 100;
-            console.log(result, 'result')
-            return result;
-        }
-    },
+    // for collection
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    statics: statics,
+// : {
+//         statics
+//         // getName () {
+//         //     console.log(this, 'this')
+//         // },
+//         // createHero$ () {
+//         //     console.log(this, 'createHero this')
+//         // }
+//     },
+    // for document
+    methods: methods
 }
 
 export default heroCollection;
